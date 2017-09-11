@@ -1,0 +1,41 @@
+<idea-plugin>
+  <id>com.elyria.plugin.breakwords</id>
+  <name>BreakWords</name>
+  <version>1.0</version>
+  <vendor email="tjsummery@gmail.com" url="http://github.com/jungletian.BreakWords">BreakWords</vendor>
+
+  <description><![CDATA[
+      <html>This is a idea plugin for helping you break down the barrier of language. <br>
+<a href="http://github.com/jungletian.BreakWords"> openSource</a>
+select your word and press alt + Q
+      </html>
+    ]]></description>
+
+  <change-notes><![CDATA[
+      This plugin can help you break words
+    ]]>
+  </change-notes>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+  <idea-version since-build="145.0"/>
+
+  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+    <action id="breakwords.ID" class="com.elyria.breakwords.BreakWords" text="break words"
+        description="break words">
+      <add-to-group group-id="CodeMenu" anchor="first"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="alt Q"/>
+    </action>
+  </actions>
+
+</idea-plugin>
