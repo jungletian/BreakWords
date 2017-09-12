@@ -36,8 +36,8 @@ class BreakWords : AnAction() {
   private val PARAMS_SALT = "salt"
   private val PARAMS_SIGN = "sign"
 
-  private val DEFAULT_VALUE_FROM = "EN"
-  private val DEFAULT_VALUE_TO = "zh-CHS"
+  private val DEFAULT_VALUE_FROM = "auto"
+  private val DEFAULT_VALUE_TO = "auto"
 
   private var latestClickTime: Long = 0
   private var mEditor: Editor? = null

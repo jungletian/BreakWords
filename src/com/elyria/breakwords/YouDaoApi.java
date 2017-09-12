@@ -43,7 +43,7 @@ public class YouDaoApi {
 
   public static void main(String[] args) throws Exception {
     BreakWords breakWords = new BreakWords();
-    breakWords.requestTranslate("TRACE_TAG_REACT_JSC_CALLS");
+    breakWords.requestTranslate("context");
   }
 
   public static String requestForHttp(String url, Map<String, String> requestParams)
