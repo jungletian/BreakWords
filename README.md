@@ -1,5 +1,5 @@
 # BreakWords
-an idea plugin to help you break down the barrier of language that written in Kotlin
+An idea plugin to help you break down the barrier of language that written in Kotlin
 
 ### Aim
 
@@ -8,17 +8,17 @@ So this born to help you remember and break the words.
 
 ### Install
 
-Download the [BreakWords.jar](/BreakWords.jar) and open your IDE (Idea, Android Studio, WebStorm...) press `cmd + ,` -> Plugins -> Install plugin from disk -> choose BreakWords.jar -> restart.
+Download the [BreakWords.jar](/BreakWords.jar) -> open your IDE (Idea, Android Studio, WebStorm...) -> press `cmd + ,` -> Plugins -> Install plugin from disk -> choose BreakWords.jar -> restart.
 
 ### Usage
 
 Select the word and press `cmd + q` the prompt pop like following:
 
-![img](/img/img.jpg)
+<img src="/img/img.jpg" width="500">
 
 ### Feature
 
-* auto recognize the language of the word in your env. (英 -> 汉 || 汉 -> 英)
+* auto recognize the language of the word in your env. (英 -> 汉 & 汉 -> 英)
 * only one `BreakWords.kt` file, simplify code, clean code.
 * hope your feedback and communicate with each other.
 * welcome scan the QR code or contact [jungletian](tjsummery@gmail.com) for feedback.
@@ -28,4 +28,5 @@ Select the word and press `cmd + q` the prompt pop like following:
 ### Thanks
 
 [有道翻译API](http://ai.youdao.com/docs/api.s)
+
 [码个蛋](https://github.com/BolexLiu/ReciteWords)
