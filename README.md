@@ -12,7 +12,7 @@ Download the [BreakWords.jar](/BreakWords.jar) -> open your IDE (Idea, Android S
 
 ### Usage
 
-Select the word and press `cmd + q` the prompt pop like following:
+Select the word and press `alt + q` the prompt pop like following:
 
 <img src="/img/img.jpg" width="500">
 
