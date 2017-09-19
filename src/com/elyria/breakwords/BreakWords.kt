@@ -101,7 +101,7 @@ class BreakWords : AnAction() {
     }).start()
   }
 
-  fun getCurrentWords(editor: Editor): String? {
+  private fun getCurrentWords(editor: Editor): String? {
     val document = editor.document
     val caretModel = editor.caretModel
     val caretOffset = caretModel.offset
@@ -123,7 +123,7 @@ class BreakWords : AnAction() {
         ?: 0
 
     var lastLetter = 0
-    for (ptr in cursor..lineEndOffset - lineStartOffset - 1) {
+    for (ptr in cursor until lineEndOffset - lineStartOffset) {
       lastLetter = ptr
       if (!Character.isLetter(chars[ptr])) {
         end = ptr
@@ -134,20 +134,18 @@ class BreakWords : AnAction() {
       end = lastLetter + 1
     }
 
-    val ret = String(chars, start, end - start)
-    return ret
+    return String(chars, start, end - start)
   }
 
-  fun addBlanks(str: String): String {
+  private fun addBlanks(str: String): String {
     val temp = str.replace("_".toRegex(), " ")
     if (temp == temp.toUpperCase()) {
       return temp
     }
-    val result = temp.replace("([A-Z]+)".toRegex(), " $0")
-    return result
+    return temp.replace("([A-Z]+)".toRegex(), " $0")
   }
 
-  fun strip(str: String): String {
+  private fun strip(str: String): String {
     return str.replace("/\\*+".toRegex(), "")
         .replace("\\*+/".toRegex(), "")
         .replace("\\*".toRegex(), "")
@@ -156,7 +154,7 @@ class BreakWords : AnAction() {
         .replace("\\s+".toRegex(), " ")
   }
 
-  fun isFastClick(timeMillis: Long): Boolean {
+  private fun isFastClick(timeMillis: Long): Boolean {
     val time = System.currentTimeMillis()
     val timeD = time - latestClickTime
     if (timeD in 1..(timeMillis - 1)) {
@@ -176,7 +174,7 @@ class BreakWords : AnAction() {
     }
   }
 
-  fun createTranslateParams(query: String): List<NameValuePair> {
+  private fun createTranslateParams(query: String): List<NameValuePair> {
     val salt = System.currentTimeMillis().toString()
     val params = ArrayList<NameValuePair>()
     params.add(BasicNameValuePair(PARAMS_QUERY, query))
@@ -194,30 +192,70 @@ data class TranslationBasic(
     @SerializedName("uk-phonetic") val phonetic_uk: String?,
     @SerializedName("phonetic") val phonetic: String?,
     @SerializedName("explains") val explains: Array<String>?
-)
+) {
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as TranslationBasic
+
+    if (phonetic_us != other.phonetic_us) return false
+    if (phonetic_uk != other.phonetic_uk) return false
+    if (phonetic != other.phonetic) return false
+    if (!Arrays.equals(explains, other.explains)) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = phonetic_us?.hashCode() ?: 0
+    result = 31 * result + (phonetic_uk?.hashCode() ?: 0)
+    result = 31 * result + (phonetic?.hashCode() ?: 0)
+    result = 31 * result + (explains?.let { Arrays.hashCode(it) } ?: 0)
+    return result
+  }
+}
 
 data class WebTranslation(
-    @SerializedName("key") val key: String?,
-    @SerializedName("value") val values: Array<String>?
+    @SerializedName("key") private val key: String?,
+    @SerializedName("value") private val values: Array<String>?
 ) {
   override fun toString(): String {
     return key + ": " + values?.joinToString(" , ")
   }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as WebTranslation
+
+    if (key != other.key) return false
+    if (!Arrays.equals(values, other.values)) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = key?.hashCode() ?: 0
+    result = 31 * result + (values?.let { Arrays.hashCode(it) } ?: 0)
+    return result
+  }
 }
 
 data class Translation(
-    @SerializedName("translation") val translations: Array<String>?,
+    @SerializedName("translation") private val translations: Array<String>?,
     @SerializedName("errorCode") val errorCode: Int,
-    @SerializedName("query") val query: String?,
-    @SerializedName("basic") val basic: TranslationBasic?,
-    @SerializedName("web") val webTranslations: Array<WebTranslation>?,
+    @SerializedName("query") private val query: String? = "翻译",
+    @SerializedName("basic") private val basic: TranslationBasic?,
+    @SerializedName("web") private val webTranslations: Array<WebTranslation>?,
     var errorMessage: String?
 ) {
   override fun toString(): String {
     if (errorCode != ERROR_CODE_SUCCESS) {
       return "错误代码: $errorCode \n $errorMessage"
     } else {
-      val translationTop = "<h3 style=\"font-size: 15px\"> $query: ${translations?.joinToString(", ")}<h3/>"
+      val translationTop = "<h3 style=\"font-size: 15px\"> ${query ?: "翻译"}: ${translations?.joinToString(", ")}<h3/>"
       var phoneticUs: String? = ""
       var phoneticUk: String? = ""
       var phonetic: String? = ""
@@ -244,5 +282,31 @@ data class Translation(
       }
       return "$translationTop $phonetic $translationBody $translationWeb"
     }
+  }
+
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (javaClass != other?.javaClass) return false
+
+    other as Translation
+
+    if (!Arrays.equals(translations, other.translations)) return false
+    if (errorCode != other.errorCode) return false
+    if (query != other.query) return false
+    if (basic != other.basic) return false
+    if (!Arrays.equals(webTranslations, other.webTranslations)) return false
+    if (errorMessage != other.errorMessage) return false
+
+    return true
+  }
+
+  override fun hashCode(): Int {
+    var result = translations?.let { Arrays.hashCode(it) } ?: 0
+    result = 31 * result + errorCode
+    result = 31 * result + (query?.hashCode() ?: 0)
+    result = 31 * result + (basic?.hashCode() ?: 0)
+    result = 31 * result + (webTranslations?.let { Arrays.hashCode(it) } ?: 0)
+    result = 31 * result + (errorMessage?.hashCode() ?: 0)
+    return result
   }
 }
